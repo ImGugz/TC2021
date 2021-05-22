@@ -1,0 +1,231 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;			leitura inicial de Qin de M1			                       ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+q_in1 Q___ Q___ r*** q_MT1Kcomp
+q_in1 $___ $___ r*** q_Mivazia
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;		copiar uma máquina aquando da outra estar vazia		               ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+q_Mivazia ____ ____ ***l q_fim
+q_Mivazia $___ $___ r*** q_Mivazia ; corner case de quando M2 vazio
+q_Mivazia Q___ Q__Q r**r q_Mivazia 
+q_Mivazia Y___ Y__Y r**r q_Mivazia 
+q_Mivazia N___ N__N r**r q_Mivazia 
+q_Mivazia A___ A__A r**r q_Mivazia 
+q_Mivazia S___ S__S r**r q_Mivazia 
+q_Mivazia L___ L__L r**r q_Mivazia 
+q_Mivazia R___ R__R r**r q_Mivazia 
+q_Mivazia 0___ 0__0 r**r q_Mivazia 
+q_Mivazia 1___ 1__1 r**r q_Mivazia 
+q_Mivazia 2___ 2__2 r**r q_Mivazia 
+q_Mivazia 3___ 3__3 r**r q_Mivazia 
+q_Mivazia 4___ 4__4 r**r q_Mivazia 
+q_Mivazia 5___ 5__5 r**r q_Mivazia 
+q_Mivazia 6___ 6__6 r**r q_Mivazia 
+q_Mivazia 7___ 7__7 r**r q_Mivazia 
+q_Mivazia 8___ 8__8 r**r q_Mivazia 
+q_Mivazia 9___ 9__9 r**r q_Mivazia 
+q_Mivazia ;___ ;__; r**r q_Mivazia 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;		copiar uma máquina aquando da outra estar vazia		               ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+q_MT1Kcomp A___ A___ r*** q_itAteM2
+q_MT1Kcomp 0___ 00__ rr** q_MT1Kcomp
+q_MT1Kcomp 1___ 10__ rr** q_MT1Kcomp
+q_MT1Kcomp 2___ 20__ rr** q_MT1Kcomp
+q_MT1Kcomp 3___ 30__ rr** q_MT1Kcomp
+q_MT1Kcomp 4___ 40__ rr** q_MT1Kcomp
+q_MT1Kcomp 5___ 50__ rr** q_MT1Kcomp
+q_MT1Kcomp 6___ 60__ rr** q_MT1Kcomp
+q_MT1Kcomp 7___ 70__ rr** q_MT1Kcomp
+q_MT1Kcomp 8___ 80__ rr** q_MT1Kcomp
+q_MT1Kcomp 9___ 90__ rr** q_MT1Kcomp
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;		iterar por M1 até chegar a M2 ($)		   	                       ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+q_itAteM2 $___ $___ r*** q_in2
+q_itAteM2 *___ *___ r*** q_itAteM2
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;			leitura inicial de Qin de M2			                       ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+q_in2 Q___ Q___ r*** q_MT2Kcomp
+q_in2 ____ ____ l*** q_M2vazia
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;		caso de M2 estar vazia (copia-se só M2)			                   ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+q_M2vazia ____ ____ r*** q_Mivazia
+q_M2vazia *___ *___ l*** q_M2vazia
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;		colocar na terceira fita K 0's pertencentes a M2	               ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+q_MT2Kcomp A___ A___ rll* q_cmpMTKs
+q_MT2Kcomp 0___ 0_0_ r*r* q_MT2Kcomp
+q_MT2Kcomp 1___ 1_1_ r*r* q_MT2Kcomp
+q_MT2Kcomp 2___ 2_2_ r*r* q_MT2Kcomp
+q_MT2Kcomp 3___ 3_3_ r*r* q_MT2Kcomp
+q_MT2Kcomp 4___ 4_4_ r*r* q_MT2Kcomp
+q_MT2Kcomp 5___ 5_5_ r*r* q_MT2Kcomp
+q_MT2Kcomp 6___ 6_6_ r*r* q_MT2Kcomp
+q_MT2Kcomp 7___ 7_7_ r*r* q_MT2Kcomp
+q_MT2Kcomp 8___ 8_8_ r*r* q_MT2Kcomp
+q_MT2Kcomp 9___ 9_9_ r*r* q_MT2Kcomp
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;	colocar K #s na segunda e terceira fita correspondentes a K de M1 e M2 respetivamente	       ;
+;	os restantes elementos são fixos -> diferença de cardinais com 0 ou i associado a Mi	       ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+q_cmpMTKs *00_ *##_ lll* q_cmpMTKs ;
+q_cmpMTKs *0__ *#0_ lll* q_cmpMTKs ; máquina 1 tem K > máquina 2
+q_cmpMTKs *_0_ *0#_ lll* q_cmpMTKs ; máquina 2 tem K > máquina 1
+q_cmpMTKs *___ *01_ lll* q_initcopiaMT1 ; 0 e 1 como ref e começar a copiar
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;	iterar para trás para iniciar a cópia de M1 para a fita de output			                   ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+q_initcopiaMT1 ____ ____ r*** q_copiarMT1
+q_initcopiaMT1 *___ *___ l*** q_initcopiaMT1
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;	copia M1 e aquando Y, Q, N ou $ ajustar o caso para a transição p M2 (ou não - N)	           ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+q_copiarMT1 $___ $___ r*** q_initcopiaMT2
+q_copiarMT1 Q___ Q__Q rr*r q_copiarMT1_aux
+q_copiarMT1 Y___ Y__Q rr*r q_copiarMT1_aux 
+q_copiarMT1 N___ N__N rr*r q_copiarMT1_aux
+q_copiarMT1 A___ A__A r**r q_copiarMT1
+q_copiarMT1 S___ S__S r**r q_copiarMT1
+q_copiarMT1 L___ L__L r**r q_copiarMT1
+q_copiarMT1 R___ R__R r**r q_copiarMT1
+q_copiarMT1 0___ 0__0 r**r q_copiarMT1
+q_copiarMT1 1___ 1__1 r**r q_copiarMT1
+q_copiarMT1 2___ 2__2 r**r q_copiarMT1
+q_copiarMT1 3___ 3__3 r**r q_copiarMT1
+q_copiarMT1 4___ 4__4 r**r q_copiarMT1
+q_copiarMT1 5___ 5__5 r**r q_copiarMT1
+q_copiarMT1 6___ 6__6 r**r q_copiarMT1
+q_copiarMT1 7___ 7__7 r**r q_copiarMT1
+q_copiarMT1 8___ 8__8 r**r q_copiarMT1
+q_copiarMT1 9___ 9__9 r**r q_copiarMT1
+q_copiarMT1 ;___ ;__; r**r q_copiarMT1
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;	caso de tratar ou da transição p qin de M2 ou ajustar o estado de rejeição com novo K	       ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+q_copiarMT1_aux Y0__ Y0_1 *r*r q_novoQinMT2
+q_copiarMT1_aux NO__ N0_N *r*r q_copiarMT1_aux ; se rejeitar na máquina 1, não há nada para compor - rejeitamos
+q_copiarMT1_aux N#__ N#_N rr*r q_copiarMT1_aux ; idem à linha de cima
+q_copiarMT1_aux *0__ *0_0 *r*r q_copiarMT1_aux ; escrever o 0 extra dos estados da 1ª máquina
+q_copiarMT1_aux 0#__ 0#_0 rr*r q_copiarMT1_aux ; daqui para baixo meter o di correspondente
+q_copiarMT1_aux 1#__ 1#_1 rr*r q_copiarMT1_aux
+q_copiarMT1_aux 2#__ 2#_2 rr*r q_copiarMT1_aux
+q_copiarMT1_aux 3#__ 3#_3 rr*r q_copiarMT1_aux
+q_copiarMT1_aux 4#__ 4#_4 rr*r q_copiarMT1_aux
+q_copiarMT1_aux 5#__ 5#_5 rr*r q_copiarMT1_aux
+q_copiarMT1_aux 6#__ 6#_6 rr*r q_copiarMT1_aux
+q_copiarMT1_aux 7#__ 7#_7 rr*r q_copiarMT1_aux
+q_copiarMT1_aux 8#__ 8#_8 rr*r q_copiarMT1_aux
+q_copiarMT1_aux 9#__ 9#_9 rr*r q_copiarMT1_aux
+q_copiarMT1_aux *___ *___ *l** q_voltarFitaAuxM1
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;	escrever na fita do output onde antes era q_Ac em M1, agora é q_in de M2		               ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+q_novoQinMT2 Y0__ Y0_0 *r*r q_novoQinMT2 ; elemento fixo (M1 não move o cursor)
+q_novoQinMT2 Y#__ Y#_0 rr*r q_novoQinMT2 ; elemento variável
+q_novoQinMT2 *___ *___ *l** q_voltarFitaAuxM1 ; fim da fita associada a M1
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;	chamada sempre que é lido um estado de controlo e existe iteração na fita aux a M1	           ;
+;				(iterar p trás)							                                           ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+q_voltarFitaAuxM1 *_** *_** **** q_copiarMT1
+q_voltarFitaAuxM1 **** **** *l** q_voltarFitaAuxM1
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;	lê o símbolo Q obrigatório após o $ que separa as duas máquinas				   ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+q_initcopiaMT2 Q___ Q__; ***r q_copiarMT2
+q_initcopiaMT2 ____ ____ ***l q_fim ; caso a averiguar
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;	copia M2 para a fita de output, ajustando os K Y's, N's e di seguidos de um Q    	           ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+q_copiarMT2 ____ ____ ***l q_fim ; acabámos de ler a composição
+q_copiarMT2 Q___ Q__Q r*rr q_copiarMT2_aux ; casos semelhantes ao q_copiarMT1_aux
+q_copiarMT2 Y___ Y__Y r*rr q_copiarMT2_aux ; idem
+q_copiarMT2 N___ N__N r*rr q_copiarMT2_aux ; idem
+q_copiarMT2 A___ A__A r**r q_copiarMT2 ; o restante podemos copiar
+q_copiarMT2 S___ S__S r**r q_copiarMT2
+q_copiarMT2 L___ L__L r**r q_copiarMT2
+q_copiarMT2 R___ R__R r**r q_copiarMT2
+q_copiarMT2 0___ 0__0 r**r q_copiarMT2
+q_copiarMT2 1___ 1__1 r**r q_copiarMT2
+q_copiarMT2 2___ 2__2 r**r q_copiarMT2
+q_copiarMT2 3___ 3__3 r**r q_copiarMT2
+q_copiarMT2 4___ 4__4 r**r q_copiarMT2
+q_copiarMT2 5___ 5__5 r**r q_copiarMT2
+q_copiarMT2 6___ 6__6 r**r q_copiarMT2
+q_copiarMT2 7___ 7__7 r**r q_copiarMT2
+q_copiarMT2 8___ 8__8 r**r q_copiarMT2
+q_copiarMT2 9___ 9__9 r**r q_copiarMT2
+q_copiarMT2 ;___ ;__; r**r q_copiarMT2
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;	ajustar di's, Y's e N's em M2 de acordo com o novo K da máquina M2 o M1			               ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+q_copiarMT2_aux Y_0_ Y_0Y **rr q_copiarMT2_aux ; independemente do que é lido na fita associada a M2 podemos copiar o Y
+q_copiarMT2_aux Y_1_ Y_1Y **rr q_copiarMT2_aux ; pois se chegou a este ponto é porque foi aceite em M1
+q_copiarMT2_aux Y_#_ Y_#Y r*rr q_copiarMT2_aux ; logo, para ser aceite na composição temos de ver se é aceite em M2 tb
+q_copiarMT2_aux N_0_ N_0N **rr q_copiarMT2_aux ; caso trivial da negação
+q_copiarMT2_aux N_1_ N_1N **rr q_copiarMT2_aux ; idem
+q_copiarMT2_aux N_#_ N_#N r*rr q_copiarMT2_aux ; idem
+q_copiarMT2_aux *_0_ *_00 **rr q_copiarMT2_aux ; onde tem 0s na fita associada a M2 escrever 0s fita de output - número de referência
+q_copiarMT2_aux *_1_ *_11 **rr q_copiarMT2_aux ; idem
+q_copiarMT2_aux 0_#_ 0_#0 r*rr q_copiarMT2_aux ; aquando o cardinal, escrever di correspondente na 4ª fita
+q_copiarMT2_aux 1_#_ 1_#1 r*rr q_copiarMT2_aux
+q_copiarMT2_aux 2_#_ 2_#2 r*rr q_copiarMT2_aux
+q_copiarMT2_aux 3_#_ 3_#3 r*rr q_copiarMT2_aux
+q_copiarMT2_aux 4_#_ 4_#4 r*rr q_copiarMT2_aux
+q_copiarMT2_aux 5_#_ 5_#5 r*rr q_copiarMT2_aux
+q_copiarMT2_aux 6_#_ 6_#6 r*rr q_copiarMT2_aux
+q_copiarMT2_aux 7_#_ 7_#7 r*rr q_copiarMT2_aux
+q_copiarMT2_aux 8_#_ 8_#8 r*rr q_copiarMT2_aux
+q_copiarMT2_aux 9_#_ 9_#9 r*rr q_copiarMT2_aux
+q_copiarMT2_aux *___ *___ **l* q_voltarFitaAuxM2 ; voltar a copiar a máquina 2
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;	chamada sempre que é lido um estado de controlo e existe iteração na fita aux a M2	           ;
+;				(iterar p trás)							                                           ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+q_voltarFitaAuxM2 **_* **_* **** q_copiarMT2
+q_voltarFitaAuxM2 **** **** **l* q_voltarFitaAuxM2
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;	estado final com iteração p trás a fim de computar o devido output de M2 o M1		           ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+q_fim ____ ____ ***r halt-accept ; andar para a right para o devido output
+q_fim ___* ___* ***l q_fim ; iterar até ao início
