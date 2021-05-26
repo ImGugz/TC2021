@@ -103,10 +103,10 @@ q_initcopiaMT1 *____ *____ l**** q_initcopiaMT1
 ;	copia M1 e trata de trocar Qrj por Qin de M2 e Qr por Qin de M3                                ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-q_copiarMT1 $____ $____ r**** q_initcopiaMT2
+q_copiarMT1 $____ $___; r***r q_copiarMT2
 q_copiarMT1 Q____ Q___Q rr**r q_copiarMT1_aux
-q_copiarMT1 Y____ Y___Q r*r*r q_ifM1 
-q_copiarMT1 N____ N___Q r**rr q_elseM1
+q_copiarMT1 Y____ Y___Q rr**r q_ifM1 
+q_copiarMT1 N____ N___Q rr**r q_elseM1
 q_copiarMT1 A____ A___A r***r q_copiarMT1
 q_copiarMT1 S____ S___S r***r q_copiarMT1
 q_copiarMT1 L____ L___L r***r q_copiarMT1
@@ -127,6 +127,10 @@ q_copiarMT1 ;____ ;___; r***r q_copiarMT1
 ;	caso de tratar de copiar os di's correspondentes		                                       ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+q_copiarMT1_aux N0___ N0__0 *r**r q_copiarMT1_aux 
+q_copiarMT1_aux N#___ N#__0 rr**r q_copiarMT1_aux 
+q_copiarMT1_aux Y0___ Y0__0 *r**r q_copiarMT1_aux
+q_copiarMT1_aux Y#___ Y#__0 rr**r q_copiarMT1_aux
 q_copiarMT1_aux *0___ *0__0 *r**r q_copiarMT1_aux
 q_copiarMT1_aux 0#___ 0#__0 rr**r q_copiarMT1_aux
 q_copiarMT1_aux 1#___ 1#__1 rr**r q_copiarMT1_aux
@@ -141,59 +145,29 @@ q_copiarMT1_aux 9#___ 9#__9 rr**r q_copiarMT1_aux
 q_copiarMT1_aux *____ *____ *l*** q_voltarFitaAuxM1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;	caso de tratar de mudar Qac de M1 para Qin de M2		                                       ;
+;	                   colocar o identificador de M2 (digito 1)		                               ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-q_ifM1 Y_1__ Y_1_1 **r*r q_ifM1
-q_ifM1 Y_#__ Y_#_0 **r*r q_ifM1
-q_ifM1 Y_0__ Y_0_0 **r*r q_ifM1
-q_ifM1 *____ *____ r*l** q_voltarFitaAuxM2_mod
+q_ifM1 Y0___ Y0__1 *r**r q_copiarMT1_aux
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;	caso de tratar de mudar Qrj de M1 para Qin de M3		                                       ;
+;	                    colocar o identificador de M3 (digito 2)    		                       ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-q_elseM1 N__2_ N__22 ***rr q_elseM1
-q_elseM1 N__0_ N__00 ***rr q_elseM1
-q_elseM1 N__#_ N__#0 ***rr q_elseM1
-q_elseM1 *____ *____ r**l* q_voltarFitaAuxM3_mod
+q_elseM1 N0___ N0__2 *r**r q_copiarMT1_aux
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;	chamada sempre que é lido um estado de controlo e existe iteração na fita aux a M1	           ;
-;				(iterar p trás)							                                           ;
+;	chamada sempre que é lido um estado e se itera peçla fita aux a M1	(iterar p trás)		       ;					                                           ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 q_voltarFitaAuxM1 *_*** *_*** ***** q_copiarMT1
 q_voltarFitaAuxM1 ***** ***** *l*** q_voltarFitaAuxM1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;	chamada quando usamos a fita aux a M2 para tratar de mudar o if para Qin de M2  	           ;
-;				(iterar p trás)							                                           ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-q_voltarFitaAuxM2_mod **_** **_** ***** q_copiarMT1
-q_voltarFitaAuxM2_mod ***** ***** **l** q_voltarFitaAuxM2_mod
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;	chamada quando usamos a fita aux a M3 para tratar de mudar o else para Qin de M3  	           ;
-;				(iterar p trás)							                                           ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-q_voltarFitaAuxM3_mod ***_* ***_* ***** q_copiarMT1
-q_voltarFitaAuxM3_mod ***** ***** ***l* q_voltarFitaAuxM3_mod
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;	lê o símbolo Q obrigatório após o $ que separa M1 e M2              		                   ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-q_initcopiaMT2 Q____ Q___; ****r q_copiarMT2
-q_initcopiaMT2 _____ _____ ****l q_fim ; edge case
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;	                    copia M2 para a fita de output                                             ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-q_copiarMT2 $____ $____ r**** q_initcopiaMT3
+q_copiarMT2 $____ $___; r***r q_copiarMT3
 q_copiarMT2 Q____ Q___Q r*r*r q_copiarMT2_aux
 q_copiarMT2 Y____ Y___Y r*r*r q_copiarMT2_aux
 q_copiarMT2 N____ N___N r*r*r q_copiarMT2_aux
@@ -238,19 +212,11 @@ q_copiarMT2_aux 9_#__ 9_#_9 r*r*r q_copiarMT2_aux
 q_copiarMT2_aux *____ *____ **l** q_voltarFitaAuxM2
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;	chamada sempre que é lido um estado de controlo e existe iteração na fita aux a M2	           ;
-;				(iterar p trás)							                                           ;
+;	chamada sempre que é lido um estado e se itera pela fita aux a M2 (iterar p trás)		       ;				                                           ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 q_voltarFitaAuxM2 **_** **_** ***** q_copiarMT2
 q_voltarFitaAuxM2 ***** ***** **l** q_voltarFitaAuxM2
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;	                lê o símbolo Q obrigatório após o $ que separa M1 e M2                         ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-q_initcopiaMT3 Q____ Q___; ****r q_copiarMT3
-q_initcopiaMT3 _____ _____ ****l q_fim ; caso a averiguar
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;	                    copia M3 para a fita de output                                             ;
@@ -301,8 +267,7 @@ q_copiarMT3_aux 9__#_ 9__#9 r**rr q_copiarMT3_aux
 q_copiarMT3_aux *____ *____ ***l* q_voltarFitaAuxM3
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;	chamada sempre que é lido um estado de controlo e existe iteração na fita aux a M3	           ;
-;				(iterar p trás)							                                           ;
+;	chamada sempre que é lido um estado e se itera pela fita aux a M3 (iterar p trás)		       ;				                                           ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 q_voltarFitaAuxM3 ***_* ***_* ***** q_copiarMT3
